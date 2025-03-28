@@ -1,11 +1,13 @@
 import re
-import nltk
 
+import nltk
 
 stop_words = set(nltk.corpus.stopwords.words("english"))
 lemmatizer = nltk.stem.WordNetLemmatizer()
-nltk.download("stopwords")
-nltk.download("wordnet")
+
+# Uncomment if needed.
+# nltk.download("stopwords")
+# nltk.download("wordnet")
 
 
 def clean_text(text: str) -> str:
