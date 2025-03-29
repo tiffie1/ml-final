@@ -35,6 +35,11 @@ def clean_text(text: str) -> str:
 
 
 if __name__ == "__main__":
+    # columns = 'id', 'label', 'tweet'
     data = read_csv("./data/twitter.csv")
-    data["tweet"] = data["tweet"].apply(clean_text)
-    data.to_csv("./data/twitter_clean.csv")
+    data = data.dropna(subset=["tweet"])
+
+    if data is not None:
+        data["tweet"] = data["tweet"].apply(clean_text)
+        data = data.dropna(subset=["tweet"])
+        data.to_csv("./data/twitter_clean.csv")
