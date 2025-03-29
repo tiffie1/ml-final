@@ -1,6 +1,7 @@
 import re
 
 import nltk
+from pandas import read_csv
 
 stop_words = set(nltk.corpus.stopwords.words("english"))
 lemmatizer = nltk.stem.WordNetLemmatizer()
@@ -31,3 +32,9 @@ def clean_text(text: str) -> str:
     )
 
     return text
+
+
+if __name__ == "__main__":
+    data = read_csv("./data/twitter.csv")
+    data["tweet"] = data["tweet"].apply(clean_text)
+    data.to_csv("./data/twitter_clean.csv")
