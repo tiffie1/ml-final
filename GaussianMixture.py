@@ -2,13 +2,12 @@ from typing import cast
 
 import numpy as np
 import pandas as pd
-from pandas import DataFrame, read_csv
+from pandas import DataFrame, Series, read_csv
 from scipy.sparse import csr_matrix
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.mixture import GaussianMixture
+from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
-
-from GraphicsUtils import bar_binary_plot
 
 if __name__ == "__main__":
     # columns = 'id', 'label', 'tweet'
@@ -36,17 +35,18 @@ if __name__ == "__main__":
     X_dev = X_dev.toarray()
     X_dev = np.array(X_dev)
 
-    X_test = vectorizer.transform(data_test["tweet"])  # type: ignore[attr-defined]
+    X_test: csr_matrix = vectorizer.transform(data_test["tweet"])  # type: ignore[attr-defined]
     X_test = X_test.toarray()
     X_test = np.array(X_test)
 
-    y_train = data_train["label"]
-    y_dev = data_dev["label"]
-    y_test_true = data_test["label"]
+    y_train: Series = data_train["label"]
+    y_dev: Series = data_dev["label"]
+    y_test_true: Series = data_test["label"]
 
-
-    model = GaussianMixture(2)
-
+    model = LinearDiscriminantAnalysis(solver="svd")
     model.fit(X_train, y_train)
-    y_test_pred = model.predict(X_test)
-    bar_binary_plot(pd.Series(y_test_pred), "pred id distribution", "id")
+    y_test_pred: Series = pd.Series(model.predict(X_test))
+
+    print(y_test_true.value_counts())
+    print(y_test_pred.value_counts(), "\n")
+    print(classification_report(y_test_true, y_test_pred))
