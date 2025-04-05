@@ -43,6 +43,8 @@ if __name__ == "__main__":
     y_dev: Series = data_dev["label"]
     y_test_true: Series = data_test["label"]
 
+
+    # Train and predict with model.
     model = LinearDiscriminantAnalysis(solver="svd")
     model.fit(X_train, y_train)
     y_test_pred: Series = pd.Series(model.predict(X_test))
